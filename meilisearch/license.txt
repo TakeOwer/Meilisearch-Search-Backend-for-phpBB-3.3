@@ -1,0 +1,10 @@
+			GNU GENERAL PUBLIC LICENSE
+			   Version 2, June 1991
+
+This extension is licensed under the GNU General Public License, version 2
+(GPL-2.0-only), the same license as the phpBB Forum Software package.
+
+The full license text is available at:
+https://opensource.org/licenses/GPL-2.0
+
+Copyright (c) 2026 Salvo Cortesiano

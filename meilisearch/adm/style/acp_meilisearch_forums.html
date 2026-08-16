@@ -1,0 +1,87 @@
+<!-- INCLUDE overall_header.html -->
+
+<a id="maincontent"></a>
+
+<h1>{L_ACP_MEILISEARCH_FORUMS}</h1>
+
+<p>{L_ACP_MEILISEARCH_FORUMS_EXPLAIN}</p>
+
+<div class="successbox">
+	<h3>{L_MEILISEARCH_FORUMS_WARNING_TITLE}</h3>
+	<p>{L_MEILISEARCH_FORUMS_WARNING}</p>
+</div>
+
+<!-- IF ERRORS -->
+	<div class="errorbox">
+		<h3>{L_WARNING}</h3>
+		<p>{ERRORS}</p>
+	</div>
+<!-- ENDIF -->
+
+<!-- IF NOTICES -->
+	<div class="successbox">
+		<h3>{L_INFORMATION}</h3>
+		<p>{NOTICES}</p>
+	</div>
+<!-- ENDIF -->
+
+<!-- IF S_PRESELECTED -->
+	<div class="successbox">
+		<p>{L_MEILISEARCH_FORUMS_PRESELECT_NOTE}</p>
+	</div>
+<!-- ENDIF -->
+
+<form id="acp_meilisearch_forums" method="post" action="{U_ACTION}">
+
+<fieldset>
+	<legend>{L_MEILISEARCH_FORUMS_LIST}</legend>
+
+	<p>
+		{L_MEILISEARCH_FORUMS_INDEXED}{L_COLON} <strong>{INCLUDED_COUNT}</strong> &nbsp;&mdash;&nbsp;
+		{L_MEILISEARCH_FORUMS_EXCLUDED}{L_COLON} <strong>{EXCLUDED_COUNT}</strong>
+	</p>
+
+	<table class="table1">
+	<thead>
+	<tr>
+		<th style="width: 70%;">{L_MEILISEARCH_FORUMS_COL_NAME}</th>
+		<th style="width: 30%;">{L_MEILISEARCH_FORUMS_EXCLUDE}</th>
+	</tr>
+	</thead>
+	<tbody>
+	<!-- BEGIN forums -->
+		<tr class="<!-- IF forums.S_ROW_COUNT is even -->bg1<!-- ELSE -->bg2<!-- ENDIF -->">
+			<td>
+				<!-- IF forums.S_IS_CATEGORY -->
+					<strong>{forums.FORUM_NAME}</strong>
+				<!-- ELSE -->
+					&nbsp;&nbsp;&nbsp;{forums.FORUM_NAME}
+					<!-- IF forums.S_NO_INDEXING --> <em>({L_MEILISEARCH_FORUMS_NO_INDEXING})</em><!-- ENDIF -->
+				<!-- ENDIF -->
+			</td>
+			<td style="text-align: center;">
+				<!-- IF forums.S_IS_FORUM -->
+					<input type="checkbox" name="exclude[]" value="{forums.FORUM_ID}"<!-- IF forums.S_EXCLUDED --> checked="checked"<!-- ENDIF --> />
+				<!-- ELSE -->
+					&nbsp;
+				<!-- ENDIF -->
+			</td>
+		</tr>
+	<!-- BEGINELSE -->
+		<tr class="bg1"><td colspan="2">{L_MEILISEARCH_FORUMS_NONE}</td></tr>
+	<!-- END forums -->
+	</tbody>
+	</table>
+</fieldset>
+
+<fieldset class="submit-buttons">
+	<legend>{L_SUBMIT}</legend>
+	<input class="button1" type="submit" name="submit_save" value="{L_SUBMIT}" onclick="document.getElementById('action_field').value='save';" />
+	<input class="button2" type="submit" name="submit_preselect" value="{L_MEILISEARCH_FORUMS_PRESELECT}" onclick="document.getElementById('action_field').value='preselect';" />
+	<input class="button2" type="submit" name="submit_purge" value="{L_MEILISEARCH_FORUMS_PURGE}" onclick="document.getElementById('action_field').value='purge_excluded';" />
+	<input type="hidden" name="action" id="action_field" value="" />
+	{S_FORM_TOKEN}
+</fieldset>
+</form>
+
+<!-- INCLUDE overall_footer.html -->

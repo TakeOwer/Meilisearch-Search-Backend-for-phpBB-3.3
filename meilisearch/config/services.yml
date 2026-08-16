@@ -1,0 +1,36 @@
+services:
+    salvocortesiano.meilisearch.client:
+        class: salvocortesiano\meilisearch\meili\client
+        arguments:
+            - '@config'
+
+    salvocortesiano.meilisearch.indexer:
+        class: salvocortesiano\meilisearch\meili\indexer
+        arguments:
+            - '@salvocortesiano.meilisearch.client'
+            - '@config'
+            - '@dbal.conn'
+            - '@text_formatter.utils'
+            - '@auth'
+            - '%core.table_prefix%'
+
+    salvocortesiano.meilisearch.cron.flush_queue:
+        class: salvocortesiano\meilisearch\cron\task\flush_queue
+        arguments:
+            - '@config'
+            - '@salvocortesiano.meilisearch.indexer'
+        calls:
+            - [set_name, [salvocortesiano.meilisearch.cron.flush_queue]]
+        tags:
+            - { name: cron.task }
+
+    salvocortesiano.meilisearch.listener:
+        class: salvocortesiano\meilisearch\event\listener
+        arguments:
+            - '@config'
+            - '@template'
+            - '@language'
+            - '@user'
+            - '%core.root_path%'
+        tags:
+            - { name: event.listener }
