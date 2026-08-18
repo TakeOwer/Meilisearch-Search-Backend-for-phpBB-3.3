@@ -1,0 +1,157 @@
+<!-- INCLUDE overall_header.html -->
+
+<a id="maincontent"></a>
+
+<h1>{L_ACP_MEILISEARCH_DIAGNOSTICS}</h1>
+
+<p>{L_ACP_MEILISEARCH_DIAGNOSTICS_EXPLAIN}</p>
+
+<!-- IF ERRORS -->
+	<div class="errorbox">
+		<h3>{L_WARNING}</h3>
+		<p>{ERRORS}</p>
+	</div>
+<!-- ENDIF -->
+
+<!-- IF NOTICES -->
+	<div class="successbox">
+		<h3>{L_INFORMATION}</h3>
+		<p>{NOTICES}</p>
+	</div>
+<!-- ENDIF -->
+
+<!-- IF not S_CURL_AVAILABLE -->
+	<div class="errorbox">
+		<p>{L_MEILISEARCH_NO_CURL}</p>
+	</div>
+<!-- ENDIF -->
+
+<!-- IF not S_BACKEND_ACTIVE -->
+	<div class="errorbox">
+		<p>{L_MEILISEARCH_NOT_ACTIVE} <a href="{U_SEARCH_SETTINGS}">{L_MEILISEARCH_GO_TO_SETTINGS}</a></p>
+	</div>
+<!-- ENDIF -->
+
+<form id="acp_meilisearch" method="post" action="{U_ACTION}">
+
+<fieldset>
+	<legend>{L_MEILISEARCH_CONNECTION}</legend>
+
+	<dl>
+		<dt><label>{L_MEILISEARCH_URL}{L_COLON}</label></dt>
+		<dd><strong>{MEILI_URL}</strong></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_MEILISEARCH_STATUS}{L_COLON}</label></dt>
+		<dd>
+			<!-- IF S_HEALTH_OK -->
+				<strong style="color: #228822;">{L_MEILISEARCH_REACHABLE}</strong>
+				<!-- IF MEILI_VERSION --> &mdash; v{MEILI_VERSION}<!-- ENDIF -->
+			<!-- ELSE -->
+				<strong style="color: #BC2A4D;">{L_MEILISEARCH_UNREACHABLE}</strong>
+			<!-- ENDIF -->
+		</dd>
+	</dl>
+	<!-- IF PROBE_ERROR -->
+	<dl>
+		<dt><label>{L_MEILISEARCH_STAT_ERROR}{L_COLON}</label></dt>
+		<dd><span style="color: #BC2A4D;">{PROBE_ERROR}</span></dd>
+	</dl>
+	<!-- ENDIF -->
+	<dl>
+		<dt><label>{L_MEILISEARCH_TEST_CONN}{L_COLON}</label><br /><span>{L_MEILISEARCH_TEST_CONN_EXPLAIN}</span></dt>
+		<dd><input class="button2" type="submit" name="submit_test_conn" value="{L_MEILISEARCH_TEST_CONN_BUTTON}" onclick="document.getElementById('meili_action').value='test_connection';" /></dd>
+	</dl>
+</fieldset>
+
+<fieldset>
+	<legend>{L_MEILISEARCH_INDEX_STATE}</legend>
+
+	<dl>
+		<dt><label>{L_MEILISEARCH_INDEX}{L_COLON}</label></dt>
+		<dd><strong>{MEILI_INDEX}</strong> <!-- IF not S_INDEX_OK -->&mdash; {L_MEILISEARCH_INDEX_MISSING}<!-- ENDIF --></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_MEILISEARCH_STAT_DOCUMENTS}{L_COLON}</label></dt>
+		<dd>{MEILI_DOCUMENTS}</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_MEILISEARCH_STAT_INDEXING}{L_COLON}</label></dt>
+		<dd><!-- IF S_IS_INDEXING -->{L_YES}<!-- ELSE -->{L_NO}<!-- ENDIF --></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_MEILISEARCH_LOCALES}{L_COLON}</label></dt>
+		<dd><!-- IF MEILI_LOCALES -->{MEILI_LOCALES}<!-- ELSE -->{L_MEILISEARCH_LOCALES_AUTO}<!-- ENDIF --></dd>
+	</dl>
+
+	<dl>
+		<dt><label>{L_MEILISEARCH_TEST_INDEX}{L_COLON}</label><br /><span>{L_MEILISEARCH_TEST_INDEX_EXPLAIN}</span></dt>
+		<dd><input class="button2" type="submit" name="submit_test_index" value="{L_MEILISEARCH_TEST_INDEX_BUTTON}" onclick="document.getElementById('meili_action').value='test_index';" /></dd>
+	</dl>
+
+	<p><a href="{U_SEARCH_INDEX}">&raquo; {L_MEILISEARCH_GO_TO_INDEX}</a></p>
+</fieldset>
+
+<fieldset>
+	<legend>{L_MEILISEARCH_QUEUE}</legend>
+
+	<p>{L_MEILISEARCH_QUEUE_EXPLAIN}</p>
+
+	<dl>
+		<dt><label>{L_MEILISEARCH_QUEUE_PENDING}{L_COLON}</label></dt>
+		<dd><strong>{MEILI_QUEUE_SIZE}</strong></dd>
+	</dl>
+</fieldset>
+
+<fieldset>
+	<legend>{L_MEILISEARCH_KEY_SECTION}</legend>
+
+	<p>{L_MEILISEARCH_KEY_EXPLAIN}</p>
+
+	<dl>
+		<dt><label>{L_MEILISEARCH_KEY_CURRENT}{L_COLON}</label></dt>
+		<dd>
+			<!-- IF S_HAS_API_KEY -->
+				<span style="color: #228822;">{L_MEILISEARCH_KEY_PRESENT}</span>
+			<!-- ELSE -->
+				<span style="color: #BC2A4D;">{L_MEILISEARCH_KEY_ABSENT}</span>
+			<!-- ENDIF -->
+		</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_MEILISEARCH_KEY_PERMISSIONS}{L_COLON}</label></dt>
+		<dd><samp style="font-size: 0.9em;">{MEILI_KEY_ACTIONS}</samp></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_MEILISEARCH_TEST_KEY}{L_COLON}</label><br /><span>{L_MEILISEARCH_TEST_KEY_EXPLAIN}</span></dt>
+		<dd><input class="button2" type="submit" name="submit_test_key" value="{L_MEILISEARCH_TEST_KEY_BUTTON}" onclick="document.getElementById('meili_action').value='test_key';" /></dd>
+	</dl>
+</fieldset>
+
+<fieldset>
+	<legend>{L_MEILISEARCH_KEY_GENERATE}</legend>
+
+	<div class="successbox">
+		<p>{L_MEILISEARCH_KEY_MASTER_WARNING}</p>
+	</div>
+
+	<dl>
+		<dt><label for="master_key">{L_MEILISEARCH_KEY_MASTER}{L_COLON}</label><br /><span>{L_MEILISEARCH_KEY_MASTER_EXPLAIN}</span></dt>
+		<dd><input id="master_key" type="password" size="45" maxlength="255" name="master_key" value="" autocomplete="off" /></dd>
+	</dl>
+	<p>
+		<input class="button2" type="submit" name="submit_genkey" value="{L_MEILISEARCH_KEY_GENERATE_BUTTON}" onclick="document.getElementById('meili_action').value='generate_key';" />
+	</p>
+</fieldset>
+
+<fieldset class="submit-buttons">
+	<legend>{L_SUBMIT}</legend>
+	<input class="button1" type="submit" name="submit_apply" value="{L_MEILISEARCH_APPLY_SETTINGS}" onclick="document.getElementById('meili_action').value='apply_settings';" />
+	<input class="button2" type="submit" name="submit_flush" value="{L_MEILISEARCH_FLUSH_QUEUE}" onclick="document.getElementById('meili_action').value='flush_queue';" />
+	<input class="button2" type="submit" name="submit_clear" value="{L_MEILISEARCH_CLEAR_QUEUE}" onclick="document.getElementById('meili_action').value='clear_queue';" />
+	<input type="hidden" name="action" id="meili_action" value="" />
+	{S_FORM_TOKEN}
+</fieldset>
+</form>
+
+<!-- INCLUDE overall_footer.html -->
