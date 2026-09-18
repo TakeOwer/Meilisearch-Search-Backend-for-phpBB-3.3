@@ -1,0 +1,68 @@
+<!--
+	Markup of the "powered by Meilisearch" notice.
+
+	This file only draws the block. Whether it is drawn at all, and from which
+	hook, is decided by event\listener: see the two flags below.
+
+	The CSS is inlined because the notice renders on two pages only; shipping a
+	stylesheet loaded on every page of the board to style it would be a poor
+	trade. Rules are namespaced under .meili-notice so they cannot collide with
+	the style.
+-->
+<style>
+.meili-notice {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	margin: 10px 0;
+	padding: 10px 14px;
+	border: 1px solid #b8d8b8;
+	border-left: 4px solid #4f9e4f;
+	border-radius: 5px;
+	background-color: #e9f5e9;
+	color: #2c6b2c;
+	font-size: 1.1em;
+	line-height: 1.5;
+	box-sizing: border-box;
+}
+.meili-notice__icon {
+	flex: 0 0 auto;
+	width: 20px;
+	height: 20px;
+	margin-top: 1px;
+	fill: currentColor;
+}
+.meili-notice__text {
+	flex: 1 1 auto;
+	min-width: 0;
+	margin: 0;
+	color: inherit;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+}
+@media (max-width: 700px) {
+	.meili-notice {
+		padding: 9px 11px;
+		font-size: 1em;
+		gap: 8px;
+	}
+	.meili-notice__icon {
+		width: 17px;
+		height: 17px;
+	}
+}
+@media (prefers-color-scheme: dark) {
+	.meili-notice {
+		border-color: #3d6b3d;
+		border-left-color: #6fbf6f;
+		background-color: #1e2d1e;
+		color: #b9dfb9;
+	}
+}
+</style>
+<div class="meili-notice" role="status">
+	<svg class="meili-notice__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+		<path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+	</svg>
+	<p class="meili-notice__text">{MEILISEARCH_BANNER_TEXT}</p>
+</div>
