@@ -327,7 +327,20 @@ class main_module
 
 		if ($action !== '')
 		{
-			if (!check_form_key('salvocortesiano_meilisearch_forums'))
+			// A reindex continues over several requests driven by meta refresh,
+			// which arrive as GET and therefore carry no form key. Those rounds
+			// authenticate with a link hash instead; the first round still comes
+			// from the form and is checked normally.
+			$is_reindex_continuation = ($action === 'reindex' && $request->variable('batchstart', 0) > 0);
+
+			if ($is_reindex_continuation)
+			{
+				if (!check_link_hash($request->variable('hash', ''), 'meili_reindex'))
+				{
+					trigger_error($user->lang('FORM_INVALID') . adm_back_link($this->u_action), E_USER_WARNING);
+				}
+			}
+			else if (!check_form_key('salvocortesiano_meilisearch_forums'))
 			{
 				trigger_error($user->lang('FORM_INVALID') . adm_back_link($this->u_action), E_USER_WARNING);
 			}
@@ -349,6 +362,18 @@ class main_module
 					// Only fills the form; nothing is saved until the admin submits.
 					$preselect = true;
 					$notices[] = $user->lang('MEILISEARCH_FORUMS_PRESELECTED');
+				break;
+
+				case 'reindex':
+					// phpBB's own Search index page offers either "Create" or
+					// "Delete", never both: acp_search picks by index_created(),
+					// which is true as soon as the index holds documents. So once
+					// built there is no way back to "Create" without wiping the
+					// index first, which would take search down. This action fills
+					// that gap. Meilisearch upserts on post_id, so re-running it
+					// over a populated index replaces documents in place and
+					// search keeps working throughout.
+					$this->run_reindex($indexer);
 				break;
 
 				case 'purge_excluded':
@@ -527,5 +552,98 @@ class main_module
 			'MEILI_BADGE_PHP'		=> PHP_VERSION,
 			'MEILI_BADGE_LICENSE'	=> $license,
 		));
+	}
+	/**
+	 * Batched reindex, optionally limited to one forum.
+	 *
+	 * Mirrors what acp_search does for the core backends: walk the posts table in
+	 * post_id order, stop when the request is close to its time limit, and
+	 * meta-refresh to the next batch. That keeps the job resumable on hosts with
+	 * a short max_execution_time instead of dying halfway.
+	 *
+	 * @param \salvocortesiano\meilisearch\meili\indexer $indexer
+	 * @return void
+	 */
+	protected function run_reindex($indexer)
+	{
+		global $db, $request, $user, $phpbb_log;
+
+		$forum_id = $request->variable('rf', 0);
+		$start    = $request->variable('batchstart', 0);
+		$batch    = 500;
+
+		// Highest post id decides when we are finished; cached in the URL so the
+		// count is not repeated on every round trip.
+		$max_post_id = $request->variable('maxpost', 0);
+
+		if ($max_post_id === 0)
+		{
+			$sql = 'SELECT MAX(post_id) AS max_id FROM ' . POSTS_TABLE;
+			$result = $db->sql_query($sql);
+			$max_post_id = (int) $db->sql_fetchfield('max_id');
+			$db->sql_freeresult($result);
+		}
+
+		$excluded = $indexer->get_excluded_forum_ids();
+		$done     = 0;
+
+		while (still_on_time() && $start < $max_post_id)
+		{
+			$sql_array = array(
+				'SELECT'	=> 'p.post_id',
+				'FROM'		=> array(POSTS_TABLE => 'p'),
+				'LEFT_JOIN'	=> array(
+					array('FROM' => array(FORUMS_TABLE => 'f'), 'ON' => 'f.forum_id = p.forum_id'),
+				),
+				'WHERE'		=> 'p.post_id > ' . (int) $start . '
+					AND p.post_id <= ' . (int) ($start + $batch) . '
+					AND (f.enable_indexing = 1 OR f.forum_id IS NULL)',
+			);
+
+			if ($forum_id > 0)
+			{
+				$sql_array['WHERE'] .= ' AND p.forum_id = ' . (int) $forum_id;
+			}
+			else if (!empty($excluded))
+			{
+				$sql_array['WHERE'] .= ' AND ' . $db->sql_in_set('p.forum_id', $excluded, true);
+			}
+
+			$result = $db->sql_query($db->sql_build_query('SELECT', $sql_array));
+
+			$ids = array();
+
+			while ($row = $db->sql_fetchrow($result))
+			{
+				$ids[] = (int) $row['post_id'];
+			}
+
+			$db->sql_freeresult($result);
+
+			if (!empty($ids))
+			{
+				$indexer->push($ids, false);
+				$done += count($ids);
+			}
+
+			$start += $batch;
+		}
+
+		if ($start < $max_post_id)
+		{
+			$url = $this->u_action . '&amp;action=reindex&amp;rf=' . (int) $forum_id
+				. '&amp;batchstart=' . (int) $start . '&amp;maxpost=' . (int) $max_post_id
+				. '&amp;hash=' . generate_link_hash('meili_reindex');
+
+			meta_refresh(1, $url);
+
+			trigger_error($user->lang('MEILISEARCH_REINDEX_PROGRESS',
+				(int) $start, (int) $max_post_id,
+				(int) round($start / max(1, $max_post_id) * 100)) . adm_back_link($this->u_action));
+		}
+
+		$phpbb_log->add('admin', $user->data['user_id'], $user->ip, 'LOG_MEILISEARCH_REINDEXED');
+
+		trigger_error($user->lang('MEILISEARCH_REINDEX_DONE') . adm_back_link($this->u_action));
 	}
 }

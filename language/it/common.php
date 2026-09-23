@@ -275,4 +275,21 @@ $lang = array_merge($lang, array(
 	// Badge ACP
 	'MEILI_BADGE_VERSION'				=> 'versione',
 	'MEILI_BADGE_LICENSE'				=> 'licenza',
+	// Stato della riga forum
+	'MEILISEARCH_FORUMS_STATE_ON'		=> 'indicizzato',
+	'MEILISEARCH_FORUMS_STATE_OFF'		=> 'escluso',
+	// Guida al flusso e reindicizzazione
+	'MEILISEARCH_FORUMS_GUIDE_TITLE'	=> 'Come rendere effettiva una modifica fatta qui',
+	'MEILISEARCH_FORUMS_GUIDE'			=> 'Le due direzioni non sono simmetriche. <strong>Se escludi un forum</strong>: premi Invia, poi &ldquo;Rimuovi dall&rsquo;indice i forum esclusi&rdquo; &mdash; &egrave; una sola chiamata di eliminazione per filtro, istantanea anche su forum grandi. <strong>Se includi un forum</strong> che era escluso: premi Invia, poi usa il pannello di reindicizzazione qui sotto, perch&eacute; quei messaggi non sono mai stati inviati a Meilisearch e vanno riletti dal database. Nota che la pagina Indice di ricerca di phpBB mostra &ldquo;Crea&rdquo; <em>oppure</em> &ldquo;Cancella&rdquo;, mai entrambi: quando l&rsquo;indice contiene documenti il pulsante &ldquo;Crea&rdquo; l&igrave; non c&rsquo;&egrave; pi&ugrave; &mdash; ed &egrave; proprio ci&ograve; che il pannello qui sotto sostituisce. La reindicizzazione <strong>non &egrave; distruttiva</strong>: Meilisearch sostituisce i documenti sul posto in base al post id, quindi la ricerca continua a funzionare e non devi mai cancellare l&rsquo;indice prima. Un&rsquo;ultima cosa: un forum che ha &ldquo;Abilita l&rsquo;indicizzazione per la ricerca&rdquo; su No nelle proprie impostazioni phpBB resta fuori comunque, qualunque cosa scegli qui; nella lista sono segnalati.',
+
+	'MEILISEARCH_REINDEX'				=> 'Reindicizzazione',
+	'MEILISEARCH_REINDEX_EXPLAIN'		=> 'Scorre la tabella dei messaggi e reinvia i documenti a Meilisearch. Procede a blocchi e riprende dopo ogni timeout, quindi &egrave; sicura anche su hosting con limiti di esecuzione bassi. I forum esclusi e quelli con l&rsquo;indicizzazione disattivata vengono saltati.',
+	'MEILISEARCH_REINDEX_SCOPE'			=> 'Cosa reindicizzare',
+	'MEILISEARCH_REINDEX_SCOPE_EXPLAIN'	=> 'Scegli un singolo forum dopo averne incluso uno che era escluso &mdash; &egrave; molto pi&ugrave; rapido che scorrere tutto il board. Scegli tutti i forum dopo una modifica massiva o quando il rapporto di verifica segnala uno scostamento.',
+	'MEILISEARCH_REINDEX_ALL'			=> 'Tutti i forum indicizzati',
+	'MEILISEARCH_REINDEX_BUTTON'		=> 'Avvia la reindicizzazione',
+	'MEILISEARCH_REINDEX_PROGRESS'		=> 'Reindicizzazione: messaggio %1$d di %2$d (%3$d%%). La pagina si ricarica da sola; lasciala aperta.',
+	'MEILISEARCH_REINDEX_DONE'			=> 'Reindicizzazione completata.',
+
+	'LOG_MEILISEARCH_REINDEXED'			=> '<strong>Reindicizzazione Meilisearch avviata dalla pagina dei forum indicizzati</strong>',
 ));

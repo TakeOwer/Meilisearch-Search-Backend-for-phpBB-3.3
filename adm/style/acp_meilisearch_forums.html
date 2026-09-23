@@ -8,6 +8,11 @@
 
 <!-- INCLUDE @salvocortesiano_meilisearch/meilisearch_badges.html -->
 
+<div style="background:#FBF3D6; border:1px solid #D9B75F; border-left:4px solid #D9B75F; border-radius:5px; padding:11px 14px; margin:0 0 14px 0; font-size:14px; line-height:1.6; color:#5E4708;">
+	<strong style="display:block; margin-bottom:5px;">{L_MEILISEARCH_FORUMS_GUIDE_TITLE}</strong>
+	{L_MEILISEARCH_FORUMS_GUIDE}
+</div>
+
 <div class="successbox">
 	<h3>{L_MEILISEARCH_FORUMS_WARNING_TITLE}</h3>
 	<p>{L_MEILISEARCH_FORUMS_WARNING}</p>
@@ -43,37 +48,97 @@
 		{L_MEILISEARCH_FORUMS_EXCLUDED}{L_COLON} <strong>{EXCLUDED_COUNT}</strong>
 	</p>
 
-	<table class="table1">
+	<style>
+	.meili-ftable { width: 100%; border-collapse: collapse; font-size: 14px; }
+	.meili-ftable th { text-align: left; padding: 8px 10px; }
+	.meili-ftable td { padding: 7px 10px; border-bottom: 1px solid #D7DBDE; }
+	/* Categories are not selectable: make them read as separators, not rows */
+	.meili-ftable tr.meili-cat td { background: #ECEFF1; border-top: 1px solid #C3CBD1; font-weight: bold; }
+	.meili-ftable tr.meili-forum:hover td { background: #EEF4FA; cursor: pointer; }
+	/* Excluded rows carry a left marker as well as a tint, so the state survives
+	   on screens where subtle background colours are hard to tell apart. */
+	.meili-ftable tr.meili-off td { background: #FBF3D6; }
+	.meili-ftable tr.meili-off td:first-child { box-shadow: inset 4px 0 0 #D9B75F; }
+	.meili-ftable tr.meili-off:hover td { background: #F6EBC4; }
+	.meili-ftable td.meili-check { text-align: center; width: 190px; white-space: nowrap; }
+	.meili-ftable td.meili-check input { transform: scale(1.35); transform-origin: center; }
+	.meili-state { display: inline-block; min-width: 92px; margin-left: 10px; font-size: 12px; vertical-align: middle; }
+	.meili-state-off { color: #7A5B10; font-weight: bold; }
+	.meili-state-on  { color: #3B8C3B; }
+	.meili-name { padding-left: 22px; }
+	</style>
+
+	<table class="meili-ftable">
 	<thead>
 	<tr>
-		<th style="width: 70%;">{L_MEILISEARCH_FORUMS_COL_NAME}</th>
-		<th style="width: 30%;">{L_MEILISEARCH_FORUMS_EXCLUDE}</th>
+		<th style="width: auto;">{L_MEILISEARCH_FORUMS_COL_NAME}</th>
+		<th style="width: 190px; text-align: center;">{L_MEILISEARCH_FORUMS_EXCLUDE}</th>
 	</tr>
 	</thead>
 	<tbody>
 	<!-- BEGIN forums -->
-		<tr class="<!-- IF forums.S_ROW_COUNT is even -->bg1<!-- ELSE -->bg2<!-- ENDIF -->">
+		<tr id="meili-row-{forums.FORUM_ID}" class="<!-- IF forums.S_IS_CATEGORY -->meili-cat<!-- ELSE -->meili-forum<!-- IF forums.S_EXCLUDED --> meili-off<!-- ENDIF --><!-- ENDIF -->">
 			<td>
 				<!-- IF forums.S_IS_CATEGORY -->
-					<strong>{forums.FORUM_NAME}</strong>
+					{forums.FORUM_NAME}
 				<!-- ELSE -->
-					&nbsp;&nbsp;&nbsp;{forums.FORUM_NAME}
-					<!-- IF forums.S_NO_INDEXING --> <em>({L_MEILISEARCH_FORUMS_NO_INDEXING})</em><!-- ENDIF -->
+					<label for="meili-cb-{forums.FORUM_ID}" class="meili-name" style="cursor: pointer;">{forums.FORUM_NAME}</label>
+					<!-- IF forums.S_NO_INDEXING --> <em style="color: #777;">({L_MEILISEARCH_FORUMS_NO_INDEXING})</em><!-- ENDIF -->
 				<!-- ENDIF -->
 			</td>
-			<td style="text-align: center;">
+			<td class="meili-check">
 				<!-- IF forums.S_IS_FORUM -->
-					<input type="checkbox" name="exclude[]" value="{forums.FORUM_ID}"<!-- IF forums.S_EXCLUDED --> checked="checked"<!-- ENDIF --> />
+					<input type="checkbox" id="meili-cb-{forums.FORUM_ID}" name="exclude[]" value="{forums.FORUM_ID}"<!-- IF forums.S_EXCLUDED --> checked="checked"<!-- ENDIF --> onchange="meiliToggleRow(this, {forums.FORUM_ID});" />
+					<span class="meili-state <!-- IF forums.S_EXCLUDED -->meili-state-off<!-- ELSE -->meili-state-on<!-- ENDIF -->" id="meili-st-{forums.FORUM_ID}"><!-- IF forums.S_EXCLUDED -->{L_MEILISEARCH_FORUMS_STATE_OFF}<!-- ELSE -->{L_MEILISEARCH_FORUMS_STATE_ON}<!-- ENDIF --></span>
 				<!-- ELSE -->
 					&nbsp;
 				<!-- ENDIF -->
 			</td>
 		</tr>
 	<!-- BEGINELSE -->
-		<tr class="bg1"><td colspan="2">{L_MEILISEARCH_FORUMS_NONE}</td></tr>
+		<tr><td colspan="2">{L_MEILISEARCH_FORUMS_NONE}</td></tr>
 	<!-- END forums -->
 	</tbody>
 	</table>
+
+	<script>
+	// Keeps the row tint and the written state in step with the checkbox, so the
+	// page always shows what will be saved rather than what was loaded.
+	function meiliToggleRow(cb, id)
+	{
+		var row = document.getElementById('meili-row-' + id);
+		var st  = document.getElementById('meili-st-' + id);
+
+		if (row) { row.className = 'meili-forum' + (cb.checked ? ' meili-off' : ''); }
+
+		if (st)
+		{
+			st.textContent = cb.checked ? '{LA_MEILISEARCH_FORUMS_STATE_OFF}' : '{LA_MEILISEARCH_FORUMS_STATE_ON}';
+			st.className = 'meili-state ' + (cb.checked ? 'meili-state-off' : 'meili-state-on');
+		}
+	}
+	</script>
+</fieldset>
+
+<fieldset>
+	<legend>{L_MEILISEARCH_REINDEX}</legend>
+
+	<p>{L_MEILISEARCH_REINDEX_EXPLAIN}</p>
+
+	<dl>
+		<dt><label for="rf">{L_MEILISEARCH_REINDEX_SCOPE}{L_COLON}</label><br /><span>{L_MEILISEARCH_REINDEX_SCOPE_EXPLAIN}</span></dt>
+		<dd>
+			<select id="rf" name="rf">
+				<option value="0">{L_MEILISEARCH_REINDEX_ALL}</option>
+				<!-- BEGIN forums -->
+					<!-- IF forums.S_IS_FORUM --><option value="{forums.FORUM_ID}">{forums.FORUM_NAME}</option><!-- ENDIF -->
+				<!-- END forums -->
+			</select>
+		</dd>
+	</dl>
+	<p>
+		<input class="button2" type="submit" name="submit_reindex" value="{L_MEILISEARCH_REINDEX_BUTTON}" onclick="document.getElementById('action_field').value='reindex';" />
+	</p>
 </fieldset>
 
 <fieldset class="submit-buttons">

@@ -275,4 +275,21 @@ $lang = array_merge($lang, array(
 	// ACP badges
 	'MEILI_BADGE_VERSION'				=> 'version',
 	'MEILI_BADGE_LICENSE'				=> 'license',
+	// Forum row state
+	'MEILISEARCH_FORUMS_STATE_ON'		=> 'indexed',
+	'MEILISEARCH_FORUMS_STATE_OFF'		=> 'excluded',
+	// Workflow guide and reindex
+	'MEILISEARCH_FORUMS_GUIDE_TITLE'	=> 'How to apply a change made here',
+	'MEILISEARCH_FORUMS_GUIDE'			=> 'The two directions are not symmetric. <strong>Excluding a forum</strong>: press Submit, then &ldquo;Remove excluded forums from the index&rdquo; &mdash; a single delete-by-filter call, instant even on a large board. <strong>Including a forum</strong> that was excluded: press Submit, then use the reindex panel below, because those posts were never sent to Meilisearch and have to be read from the database. Note that phpBB&rsquo;s own Search index page offers either &ldquo;Create&rdquo; or &ldquo;Delete&rdquo;, never both, so once the index holds documents there is no &ldquo;Create&rdquo; button left there &mdash; that is what the panel below replaces. Reindexing is <strong>not destructive</strong>: Meilisearch replaces documents in place on their post id, so search keeps working throughout and you never need to delete the index first. Last thing: a forum whose own phpBB setting &ldquo;Enable search indexing&rdquo; is No stays out regardless of what you choose here; those are flagged in the list.',
+
+	'MEILISEARCH_REINDEX'				=> 'Reindex',
+	'MEILISEARCH_REINDEX_EXPLAIN'		=> 'Walks the posts table and pushes the documents to Meilisearch again. Runs in batches and resumes after each timeout, so it is safe on hosts with a short execution limit. Excluded forums and forums with search indexing disabled are skipped.',
+	'MEILISEARCH_REINDEX_SCOPE'			=> 'What to reindex',
+	'MEILISEARCH_REINDEX_SCOPE_EXPLAIN'	=> 'Pick a single forum after including one that was excluded &mdash; far quicker than walking the whole board. Choose all forums after a bulk change or when the health report shows drift.',
+	'MEILISEARCH_REINDEX_ALL'			=> 'All indexed forums',
+	'MEILISEARCH_REINDEX_BUTTON'		=> 'Start reindexing',
+	'MEILISEARCH_REINDEX_PROGRESS'		=> 'Reindexing: post %1$d of %2$d (%3$d%%). This page refreshes on its own; leave it open.',
+	'MEILISEARCH_REINDEX_DONE'			=> 'Reindexing complete.',
+
+	'LOG_MEILISEARCH_REINDEXED'			=> '<strong>Meilisearch reindex run from the indexed forums page</strong>',
 ));
