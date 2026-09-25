@@ -96,10 +96,6 @@ $lang = array_merge($lang, array(
 	),
 	'MEILISEARCH_QUEUE_CLEARED'			=> 'La coda di ripetizione &egrave; stata scartata. I messaggi interessati dalle voci scartate potrebbero ora mancare dall&rsquo;indice; in caso di dubbio esegui una reindicizzazione completa.',
 
-	// Voci di log
-	'LOG_MEILISEARCH_ERROR'				=> '<strong>Errore Meilisearch</strong><br />&raquo; %s',
-	'LOG_MEILISEARCH_SETTINGS_APPLIED'	=> '<strong>Impostazioni dell&rsquo;indice Meilisearch applicate</strong>',
-	'LOG_MEILISEARCH_QUEUE_CLEARED'		=> '<strong>Coda di ripetizione Meilisearch scartata</strong>',
 	// Forum indicizzati
 	'ACP_MEILISEARCH_FORUMS_EXPLAIN'	=> 'Scegli quali forum possono essere scritti nell&rsquo;indice Meilisearch. All&rsquo;installazione questa lista &egrave; stata precompilata con tutti i forum non leggibili dagli ospiti; adattala al tuo forum.',
 	'MEILISEARCH_FORUMS_WARNING_TITLE'	=> 'Cosa fa, e cosa non fa',
@@ -119,8 +115,6 @@ $lang = array_merge($lang, array(
 	'MEILISEARCH_FORUMS_PURGED'			=> 'I documenti appartenenti ai forum esclusi sono stati rimossi dall&rsquo;indice.',
 	'MEILISEARCH_STAT_EXCLUDED'			=> 'Forum esclusi',
 
-	'LOG_MEILISEARCH_FORUMS_SAVED'		=> '<strong>Lista di esclusione forum Meilisearch aggiornata</strong>',
-	'LOG_MEILISEARCH_FORUMS_PURGED'		=> '<strong>Forum esclusi rimossi dall&rsquo;indice Meilisearch</strong>',
 	// Generazione della chiave API
 	'MEILISEARCH_KEY_SECTION'			=> 'Chiave API',
 	'MEILISEARCH_KEY_EXPLAIN'			=> 'La chiave serve solo se Meilisearch &egrave; raggiungibile dalla rete. Se gira su questo server su <samp>127.0.0.1</samp> ed &egrave; stato avviato senza master key, lascia il campo vuoto &mdash; &egrave; il binding su loopback a fare da barriera. Altrimenti crea la chiave qui, invece di richiederla a qualcuno. La chiave generata &egrave; limitata all&rsquo;indice di questo forum e alle sole azioni che l&rsquo;estensione esegue davvero, cos&igrave; una chiave trafugata non pu&ograve; essere usata per eliminare altri indici o leggere altri forum.',
@@ -136,7 +130,6 @@ $lang = array_merge($lang, array(
 	'MEILISEARCH_KEY_MASTER_REQUIRED'	=> 'Inserisci la master key di Meilisearch per generare una chiave API.',
 	'MEILISEARCH_KEY_GENERATED'			=> 'Una nuova chiave API &egrave; stata creata e salvata. Le chiavi generate in precedenza restano valide sull&rsquo;istanza Meilisearch; revocale l&agrave; se non ti servono pi&ugrave;.',
 
-	'LOG_MEILISEARCH_KEY_GENERATED'		=> '<strong>Chiave API Meilisearch generata</strong>',
 	// Avviso nelle pagine di ricerca
 	'MEILISEARCH_BANNER'				=> 'Mostra un avviso nelle pagine di ricerca',
 	'MEILISEARCH_BANNER_EXPLAIN'		=> 'Mostra una riga in cima al modulo di ricerca avanzata e alla pagina dei risultati, per indicare agli utenti quale motore di ricerca &egrave; in uso. Visibile a tutti gli utenti. L&rsquo;avviso viene nascosto automaticamente quando Meilisearch non &egrave; il backend attivo, cos&igrave; non pu&ograve; mai dichiarare il falso.',
@@ -291,5 +284,22 @@ $lang = array_merge($lang, array(
 	'MEILISEARCH_REINDEX_PROGRESS'		=> 'Reindicizzazione: messaggio %1$d di %2$d (%3$d%%). La pagina si ricarica da sola; lasciala aperta.',
 	'MEILISEARCH_REINDEX_DONE'			=> 'Reindicizzazione completata.',
 
-	'LOG_MEILISEARCH_REINDEXED'			=> '<strong>Reindicizzazione Meilisearch avviata dalla pagina dei forum indicizzati</strong>',
+	// Guida alla risoluzione dei problemi
+	'HEALTH_GUIDE'						=> 'Cosa fare quando la ricerca smette di funzionare',
+	'HEALTH_GUIDE_EXPLAIN'				=> 'Il sintomo &egrave; sempre lo stesso &mdash; nessun risultato e indice dichiarato vuoto &mdash; ma la causa no. Parti dai controlli qui sopra: ti dicono quale livello ha ceduto. Le note che seguono coprono i casi pi&ugrave; frequenti.',
+
+	'HEALTH_GUIDE_NOROOT_TITLE'			=> 'Se non hai i permessi di root sul server',
+	'HEALTH_GUIDE_NOROOT'				=> 'Su un VPS gestito i comandi <samp>systemctl</samp> suggeriti qui sopra falliscono con <samp>Access denied</samp>, e riavviare l&rsquo;intera macchina resta l&rsquo;unica leva a disposizione. Ci sono tre strade migliori. <strong>Primo</strong>, verifica se hai gi&agrave; permessi parziali: esegui <samp>sudo -l</samp>; se nell&rsquo;elenco compare <samp>systemctl restart meilisearch</samp>, puoi riavviare il solo demone. <strong>Secondo</strong>, ed &egrave; quello che risolve davvero, chiedi al tuo provider di aggiungere <samp>Restart=always</samp>, <samp>RestartSec=5</samp> e un limite <samp>MemoryMax</samp> all&rsquo;unit&agrave; systemd. Con quelli, systemd rimette in piedi il demone in pochi secondi e smetti di doverti accorgere del problema. Il fatto stesso che serva un riavvio completo per recuperare indica che <samp>Restart=always</samp> manca. <strong>Terzo</strong>, chiedi loro perch&eacute; si &egrave; fermato: senza <samp>journalctl</samp> non puoi vederlo da solo, e le risposte abituali sono l&rsquo;esaurimento della memoria o un aggiornamento di sistema che ha riavviato male il servizio.',
+
+	'HEALTH_GUIDE_DOWN'					=> 'Connessione rifiutata',
+	'HEALTH_GUIDE_DOWN_TEXT'			=> 'Un errore <samp>Connection refused</samp> dopo <samp>0 ms</samp> significa che la porta ha rifiutato subito la connessione: il demone &egrave; fermo, non lento e non bloccato da un firewall. Un firewall lascerebbe invece la richiesta appesa per secondi. Riavvia il demone, oppure leggi il riquadro qui sopra se non puoi farlo.',
+
+	'HEALTH_GUIDE_REPEAT'				=> 'Si ferma di continuo',
+	'HEALTH_GUIDE_REPEAT_TEXT'			=> 'Un demone che muore ogni pochi giorni quasi sempre viene ucciso per memoria, oppure riavviato male da un aggiornamento di sistema. <samp>journalctl -u meilisearch --since "7 days ago"</samp> accanto a <samp>/var/log/apt/history.log</samp> mostra a colpo d&rsquo;occhio se i fermi coincidono con gli aggiornamenti. Un limite <samp>MemoryMax</samp> nell&rsquo;unit&agrave; systemd trasforma un esaurimento di memoria in un riavvio pulito invece che in una macchina sotto pressione.',
+
+	'HEALTH_GUIDE_EMPTY'				=> 'L&rsquo;indice risulta vuoto',
+	'HEALTH_GUIDE_EMPTY_TEXT'			=> 'phpBB segnala &ldquo;Il motore di ricerca selezionato non ha un indice&rdquo; ogni volta che il numero di documenti &egrave; zero &mdash; anche quando Meilisearch &egrave; semplicemente irraggiungibile, perch&eacute; il conteggio non pu&ograve; essere letto. Sistema prima la connessione e ricontrolla: di solito l&rsquo;indice &egrave; ancora al suo posto. Ricostruiscilo solo quando la connessione &egrave; confermata sana.',
+
+	'HEALTH_GUIDE_DRIFT'				=> 'Mancano messaggi dall&rsquo;indice',
+	'HEALTH_GUIDE_DRIFT_TEXT'			=> 'Uno scostamento tra forum e indice significa che alcuni messaggi sono stati scritti mentre il demone era fermo. La coda di ripetizione li rimanda tramite cron, quindi verifica prima di tutto che il cron giri. Se la differenza &egrave; ampia, reindicizza dalla pagina Forum indicizzati &mdash; sostituisce i documenti sul posto, quindi la ricerca continua a funzionare durante l&rsquo;operazione.',
 ));

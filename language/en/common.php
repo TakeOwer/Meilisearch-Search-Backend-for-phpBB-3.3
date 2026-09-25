@@ -96,10 +96,6 @@ $lang = array_merge($lang, array(
 	),
 	'MEILISEARCH_QUEUE_CLEARED'			=> 'The retry queue has been discarded. Posts affected by the discarded entries may now be missing from the index; run a full reindex if in doubt.',
 
-	// Log entries
-	'LOG_MEILISEARCH_ERROR'				=> '<strong>Meilisearch error</strong><br />» %s',
-	'LOG_MEILISEARCH_SETTINGS_APPLIED'	=> '<strong>Meilisearch index settings applied</strong>',
-	'LOG_MEILISEARCH_QUEUE_CLEARED'		=> '<strong>Meilisearch retry queue discarded</strong>',
 	// Indexed forums
 	'ACP_MEILISEARCH_FORUMS_EXPLAIN'	=> 'Choose which forums may be written to the Meilisearch index. On installation this list was pre-filled with every forum that guests cannot read; adjust it to match your board.',
 	'MEILISEARCH_FORUMS_WARNING_TITLE'	=> 'What this does, and what it does not do',
@@ -119,8 +115,6 @@ $lang = array_merge($lang, array(
 	'MEILISEARCH_FORUMS_PURGED'			=> 'Documents belonging to excluded forums have been removed from the index.',
 	'MEILISEARCH_STAT_EXCLUDED'			=> 'Excluded forums',
 
-	'LOG_MEILISEARCH_FORUMS_SAVED'		=> '<strong>Meilisearch forum exclusion list updated</strong>',
-	'LOG_MEILISEARCH_FORUMS_PURGED'		=> '<strong>Meilisearch excluded forums evicted from index</strong>',
 	// API key generation
 	'MEILISEARCH_KEY_SECTION'			=> 'API key',
 	'MEILISEARCH_KEY_EXPLAIN'			=> 'A key is only needed when Meilisearch is reachable over the network. If it runs on this server bound to <samp>127.0.0.1</samp> and was started without a master key, leave the key field empty &mdash; the loopback binding is the security boundary. Otherwise, create the key here rather than obtaining one from anyone. The generated key is scoped to this board&rsquo;s index and to the actions this extension actually performs, so a leaked key cannot be used to drop other indexes or read other boards.',
@@ -136,7 +130,6 @@ $lang = array_merge($lang, array(
 	'MEILISEARCH_KEY_MASTER_REQUIRED'	=> 'Enter the Meilisearch master key to generate an API key.',
 	'MEILISEARCH_KEY_GENERATED'			=> 'A new API key has been created and saved. Any key generated previously is still valid on the Meilisearch instance; revoke it there if it is no longer needed.',
 
-	'LOG_MEILISEARCH_KEY_GENERATED'		=> '<strong>Meilisearch API key generated</strong>',
 	// Front-end search notice
 	'MEILISEARCH_BANNER'				=> 'Show a notice on the search pages',
 	'MEILISEARCH_BANNER_EXPLAIN'		=> 'Displays a short line at the top of the advanced search form and the results page telling users which search engine is in use. Visible to all users. The notice is hidden automatically whenever Meilisearch is not the active backend, so it can never claim something untrue.',
@@ -291,5 +284,22 @@ $lang = array_merge($lang, array(
 	'MEILISEARCH_REINDEX_PROGRESS'		=> 'Reindexing: post %1$d of %2$d (%3$d%%). This page refreshes on its own; leave it open.',
 	'MEILISEARCH_REINDEX_DONE'			=> 'Reindexing complete.',
 
-	'LOG_MEILISEARCH_REINDEXED'			=> '<strong>Meilisearch reindex run from the indexed forums page</strong>',
+	// Troubleshooting guide
+	'HEALTH_GUIDE'						=> 'What to do when search stops working',
+	'HEALTH_GUIDE_EXPLAIN'				=> 'The symptom is always the same &mdash; zero results and an index reported as empty &mdash; but the cause is not. Work through the checks above first: they tell you which layer failed. The notes below cover the cases that come up most often.',
+
+	'HEALTH_GUIDE_NOROOT_TITLE'			=> 'If you do not have root on the server',
+	'HEALTH_GUIDE_NOROOT'				=> 'On a managed VPS the <samp>systemctl</samp> commands suggested above fail with <samp>Access denied</samp>, and rebooting the whole machine is the only lever you have. Three better routes. <strong>First</strong>, check whether you already have partial rights: run <samp>sudo -l</samp>; if <samp>systemctl restart meilisearch</samp> appears in the list, you can restart the daemon on its own. <strong>Second</strong>, and this is the one that actually fixes it, ask your provider to add <samp>Restart=always</samp>, <samp>RestartSec=5</samp> and a <samp>MemoryMax</samp> limit to the systemd unit. With those, systemd brings the daemon back within seconds and you stop having to notice at all. Needing a full reboot to recover is itself a sign that <samp>Restart=always</samp> is missing. <strong>Third</strong>, ask them why it stopped: without <samp>journalctl</samp> you cannot see it yourself, and the usual answers are the out-of-memory killer or a system update that restarted the service badly.',
+
+	'HEALTH_GUIDE_DOWN'					=> 'Connection refused',
+	'HEALTH_GUIDE_DOWN_TEXT'			=> 'An error reading <samp>Connection refused</samp> after <samp>0 ms</samp> means the port rejected the connection immediately: the daemon is stopped, not slow and not firewalled. A firewall would leave the request hanging for seconds instead. Restart the daemon, or read the box above if you cannot.',
+
+	'HEALTH_GUIDE_REPEAT'				=> 'It keeps stopping',
+	'HEALTH_GUIDE_REPEAT_TEXT'			=> 'A daemon that dies every few days is almost always being killed for memory, or restarted badly by a system update. <samp>journalctl -u meilisearch --since "7 days ago"</samp> next to <samp>/var/log/apt/history.log</samp> shows at a glance whether the stops line up with updates. A <samp>MemoryMax</samp> limit in the systemd unit turns an out-of-memory event into a clean restart instead of a machine under pressure.',
+
+	'HEALTH_GUIDE_EMPTY'				=> 'The index is empty',
+	'HEALTH_GUIDE_EMPTY_TEXT'			=> 'phpBB reports &ldquo;The selected search backend does not have a search index&rdquo; whenever the document count is zero &mdash; including when Meilisearch is simply unreachable, because the count cannot be read. Fix the connection first and look again: the index is usually still there. Only rebuild once the connection is confirmed healthy.',
+
+	'HEALTH_GUIDE_DRIFT'				=> 'Posts are missing from the index',
+	'HEALTH_GUIDE_DRIFT_TEXT'			=> 'Drift between the board and the index means posts were written while the daemon was down. The retry queue replays them from cron, so check that cron is running before anything else. If the gap is large, reindex from the Indexed forums page &mdash; it replaces documents in place, so search keeps working while it runs.',
 ));

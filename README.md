@@ -1,10 +1,4 @@
-# Meilisearch Search Backend for phpBB 3.3.x
-
-![Version](https://img.shields.io/badge/version-1.8.2-105080)
-![phpBB](https://img.shields.io/badge/phpBB-3.3.x-377a33)
-![PHP](https://img.shields.io/badge/PHP-%3E%3D7.4-377a33)
-![License](https://img.shields.io/badge/license-GPL--2.0--only-7f7f7f)
-
+# Meilisearch Search Backend for phpBB 3.3
 
 A drop-in replacement for phpBB's built-in fulltext search. It registers a new
 **search backend** that delegates keyword matching to a [Meilisearch](https://www.meilisearch.com/)

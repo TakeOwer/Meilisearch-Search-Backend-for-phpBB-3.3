@@ -91,7 +91,35 @@ class listener implements EventSubscriberInterface
 	{
 		return array(
 			'core.page_header'	=> 'assign_banner',
+			'core.user_setup'	=> 'load_log_language',
 		);
+	}
+
+	/**
+	 * Make the admin log strings available everywhere.
+	 *
+	 * The log viewer is a core ACP module and never loads an extension's own
+	 * language files, so a key defined only in common.php is written to the log
+	 * table and then rendered as {LOG_SOMETHING}. Loading it here, from
+	 * core.user_setup, is the only point early enough to cover that page.
+	 *
+	 * Only logs.php is loaded globally, never common.php: phpBB explicitly asks
+	 * that this event carry nothing beyond what is strictly needed everywhere,
+	 * and the several hundred keys in common.php are of no use on a board page.
+	 *
+	 * @param \phpbb\event\data $event
+	 * @return void
+	 */
+	public function load_log_language($event)
+	{
+		$lang_set_ext = $event['lang_set_ext'];
+
+		$lang_set_ext[] = array(
+			'ext_name' => 'salvocortesiano/meilisearch',
+			'lang_set' => 'logs',
+		);
+
+		$event['lang_set_ext'] = $lang_set_ext;
 	}
 
 	/**

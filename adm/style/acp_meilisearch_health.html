@@ -61,6 +61,34 @@
 <!-- ENDIF -->
 
 <fieldset>
+	<legend>{L_HEALTH_GUIDE}</legend>
+
+	<p>{L_HEALTH_GUIDE_EXPLAIN}</p>
+
+	<div style="background:#FBF3D6; border:1px solid #D9B75F; border-left:4px solid #D9B75F; border-radius:5px; padding:11px 14px; margin:0 0 12px 0; font-size:14px; line-height:1.6; color:#5E4708;">
+		<strong style="display:block; margin-bottom:5px;">{L_HEALTH_GUIDE_NOROOT_TITLE}</strong>
+		{L_HEALTH_GUIDE_NOROOT}
+	</div>
+
+	<dl>
+		<dt><label>{L_HEALTH_GUIDE_DOWN}{L_COLON}</label></dt>
+		<dd>{L_HEALTH_GUIDE_DOWN_TEXT}</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_HEALTH_GUIDE_REPEAT}{L_COLON}</label></dt>
+		<dd>{L_HEALTH_GUIDE_REPEAT_TEXT}</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_HEALTH_GUIDE_EMPTY}{L_COLON}</label></dt>
+		<dd>{L_HEALTH_GUIDE_EMPTY_TEXT}</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_HEALTH_GUIDE_DRIFT}{L_COLON}</label></dt>
+		<dd>{L_HEALTH_GUIDE_DRIFT_TEXT}</dd>
+	</dl>
+</fieldset>
+
+<fieldset>
 	<legend>{L_HEALTH_REPORT}</legend>
 
 	<p>{L_HEALTH_REPORT_EXPLAIN}</p>
@@ -75,7 +103,9 @@
 
 <fieldset class="submit-buttons">
 	<legend>{L_SUBMIT}</legend>
-	<a class="button1" href="{U_ACTION}">{L_HEALTH_RERUN}</a>
+	<form method="post" action="{U_ACTION}" style="display: inline;">
+		<input class="button1" type="submit" value="{L_HEALTH_RERUN}" />
+	</form>
 	<a class="button2" href="{U_DIAGNOSTICS}">{L_HEALTH_GO_DIAGNOSTICS}</a>
 </fieldset>
 
