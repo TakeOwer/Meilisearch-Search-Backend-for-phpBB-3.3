@@ -1,0 +1,172 @@
+<!-- INCLUDE overall_header.html -->
+
+<a id="maincontent"></a>
+
+<h1>{L_ACP_MEILISEARCH_SYNONYMS}</h1>
+
+<p>{L_ACP_MEILISEARCH_SYNONYMS_EXPLAIN}</p>
+
+<!-- INCLUDE @salvocortesiano_meilisearch/meilisearch_badges.html -->
+
+<!-- IF ERRORS -->
+	<div class="errorbox">
+		<h3>{L_WARNING}</h3>
+		<p>{ERRORS}</p>
+	</div>
+<!-- ENDIF -->
+
+<!-- IF NOTICES -->
+	<div class="successbox">
+		<h3>{L_INFORMATION}</h3>
+		<p>{NOTICES}</p>
+	</div>
+<!-- ENDIF -->
+
+<form id="acp_meilisearch_synonyms" method="post" action="{U_ACTION}">
+
+<fieldset>
+	<legend>{L_MEILISEARCH_SYN_LIST}</legend>
+
+	<div style="background:#FBF3D6; border:1px solid #D9B75F; border-left:4px solid #D9B75F; border-radius:5px; padding:11px 14px; margin:0 0 12px 0; font-size:14px; line-height:1.6; color:#5E4708;">
+		<strong style="display:block; margin-bottom:5px;">{L_MEILISEARCH_SYN_HOWTO_TITLE}</strong>
+		{L_MEILISEARCH_SYN_HOWTO}
+	</div>
+
+	<dl>
+		<dt>
+			<label for="synonyms">{L_MEILISEARCH_SYN_FIELD}{L_COLON}</label><br />
+			<span>{L_MEILISEARCH_SYN_FIELD_EXPLAIN}</span>
+		</dt>
+		<dd>
+			<textarea id="synonyms" name="synonyms" rows="14" style="width: 100%; font-family: Consolas, 'DejaVu Sans Mono', monospace; font-size: 13px; line-height: 1.5;">{SYNONYMS_RAW}</textarea>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_MEILISEARCH_SYN_COUNT}{L_COLON}</label></dt>
+		<dd>{SYN_COUNT_VALUE}</dd>
+	</dl>
+</fieldset>
+
+<!-- IF .syn -->
+<fieldset>
+	<legend>{L_MEILISEARCH_SYN_PREVIEW}</legend>
+
+	<p>{L_MEILISEARCH_SYN_PREVIEW_EXPLAIN}</p>
+
+	<style>
+	/* A long list is the normal case here: a few dozen groups expand into a few
+	   hundred entries. Two columns halve the height, the fixed-height box keeps
+	   the rest of the page reachable, and the filter makes a specific term
+	   findable without scrolling. */
+	.meili-syn-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0 0 8px 0; font-size: 13px; }
+	.meili-syn-tools input { padding: 4px 8px; font-size: 13px; min-width: 220px; }
+	.meili-syn-count { color: #666; }
+	.meili-syn-box {
+		max-height: 440px;
+		overflow-y: auto;
+		border: 1px solid #C7CBCF;
+		border-radius: 4px;
+		background: #fff;
+		padding: 4px;
+	}
+	.meili-syn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+	@media (max-width: 900px) { .meili-syn-grid { grid-template-columns: 1fr; } }
+	.meili-syn-item {
+		display: flex;
+		gap: 8px;
+		padding: 5px 8px;
+		border-bottom: 1px solid #EDF0F2;
+		font-size: 13.5px;
+		line-height: 1.5;
+	}
+	.meili-syn-item:hover { background: #EEF4FA; }
+	.meili-syn-term { flex: 0 0 34%; font-weight: bold; word-break: break-word; }
+	.meili-syn-others { flex: 1 1 auto; color: #444; word-break: break-word; }
+	.meili-syn-others:before { content: '\2192\00a0'; color: #9AA3AA; }
+	.meili-syn-empty { padding: 10px; color: #777; font-style: italic; }
+	</style>
+
+	<div class="meili-syn-tools">
+		<label for="syn_filter">{L_MEILISEARCH_SYN_FILTER}{L_COLON}</label>
+		<input type="text" id="syn_filter" value="" autocomplete="off" onkeyup="meiliFilterSyn();" placeholder="{L_MEILISEARCH_SYN_FILTER_PLACEHOLDER}" />
+		<span class="meili-syn-count"><span id="syn_shown">{SYN_TOTAL}</span> / {SYN_TOTAL} {L_MEILISEARCH_SYN_TERMS_LABEL}</span>
+	</div>
+
+	<div class="meili-syn-box">
+		<div class="meili-syn-grid" id="syn_grid">
+		<!-- BEGIN syn -->
+			<div class="meili-syn-item" data-syn="{syn.SEARCH}">
+				<span class="meili-syn-term">{syn.TERM}</span>
+				<span class="meili-syn-others">{syn.OTHERS}</span>
+			</div>
+		<!-- END syn -->
+		</div>
+		<div class="meili-syn-empty" id="syn_none" style="display: none;">{L_MEILISEARCH_SYN_FILTER_NONE}</div>
+	</div>
+
+	<script>
+	function meiliFilterSyn()
+	{
+		var q = document.getElementById('syn_filter').value.toLowerCase().replace(/^\s+|\s+$/g, '');
+		var items = document.getElementById('syn_grid').getElementsByClassName('meili-syn-item');
+		var shown = 0;
+
+		for (var i = 0; i < items.length; i++)
+		{
+			var hit = (q === '' || items[i].getAttribute('data-syn').indexOf(q) !== -1);
+			items[i].style.display = hit ? '' : 'none';
+			if (hit) { shown++; }
+		}
+
+		// Only the number is touched: the wording around it stays in the
+		// template, so no translated string with placeholders has to be
+		// reassembled in JavaScript.
+		document.getElementById('syn_none').style.display = shown ? 'none' : '';
+		document.getElementById('syn_shown').textContent = shown;
+	}
+	</script>
+</fieldset>
+<!-- ENDIF -->
+
+<fieldset>
+	<legend>{L_MEILISEARCH_SYN_STARTER}</legend>
+
+	<p>{L_MEILISEARCH_SYN_STARTER_EXPLAIN}</p>
+
+	<div style="background:#E9F5E9; border:1px solid #B8D8B8; border-left:4px solid #4F9E4F; border-radius:5px; padding:11px 14px; margin:0 0 12px 0; font-size:14px; line-height:1.6; color:#2C6B2C;">
+		{L_MEILISEARCH_SYN_STARTER_NOTE}<br /><br />{L_MEILISEARCH_SYN_ADD_OWN}
+	</div>
+
+	<!-- BEGIN starter -->
+	<p>
+		<input class="button2" type="submit" name="s_add_{starter.CODE}" value="{starter.L_ADD}" onclick="document.getElementById('syn_action').value='load_{starter.CODE}';" />
+		<input class="button2" type="submit" name="s_rep_{starter.CODE}" value="{starter.L_REPLACE}" onclick="return meiliConfirmReplace('{starter.CODE}');" />
+	</p>
+	<!-- BEGINELSE -->
+	<p>{L_MEILISEARCH_SYN_NO_STARTERS}</p>
+	<!-- END starter -->
+
+	<script>
+	function meiliConfirmReplace(locale)
+	{
+		if (!confirm('{LA_MEILISEARCH_SYN_REPLACE_CONFIRM}'))
+		{
+			return false;
+		}
+
+		document.getElementById('syn_action').value = 'replace_' + locale;
+
+		return true;
+	}
+	</script>
+</fieldset>
+
+<fieldset class="submit-buttons">
+	<legend>{L_SUBMIT}</legend>
+	<input class="button1" type="submit" name="submit_syn" value="{L_MEILISEARCH_SYN_SAVE}" onclick="document.getElementById('syn_action').value='save';" />
+	<input type="hidden" name="action" id="syn_action" value="save" />
+	{S_FORM_TOKEN}
+</fieldset>
+</form>
+
+<!-- INCLUDE overall_footer.html -->

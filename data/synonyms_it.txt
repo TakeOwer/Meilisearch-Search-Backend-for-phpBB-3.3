@@ -1,0 +1,67 @@
+# name: Italiano
+# Sinonimi di partenza - italiano
+# Un gruppo per riga, termini separati da virgola.
+# Ogni termine del gruppo trova tutti gli altri, in entrambe le direzioni.
+# Le righe che iniziano con # sono commenti.
+#
+# Questa lista e volutamente generalista: il valore vero lo aggiungi tu con i
+# termini del tuo forum. Caricala, poi adattala.
+#
+# NOTA: non inserire contrari. Dichiarare "grande, piccolo" come gruppo
+# significa che chi cerca "schermo grande" trova i messaggi su quelli piccoli.
+# I sinonimi colmano il divario fra come si scrive una cosa e come la si cerca;
+# i contrari lo allargano.
+
+# --- lingue e localizzazione ---
+ita, italiano, italiana
+eng, inglese, english
+sottotitoli, sottotitolo, sub, subs
+sottotitolato, softsub, hardsub
+doppiaggio, doppiato, dub
+multilingua, multi, multilanguage
+
+# --- formati video ---
+1080p, fullhd, full hd
+2160p, 4k, uhd, ultrahd
+720p, hd
+bluray, blu-ray, bd, br
+dvdrip, dvd rip
+webdl, web-dl, web dl
+hevc, h265, h.265, x265
+avc, h264, h.264, x264
+
+# --- formati audio ---
+flac, lossless
+mp3, mpeg audio
+ac3, dolby digital
+dts, digital theater systems
+
+# --- tipi di contenuto ---
+film, pellicola, lungometraggio
+serie, serie tv, telefilm, series
+episodio, ep, puntata
+stagione, season
+documentario, doc
+fumetto, fumetti, comic, comics
+rivista, riviste, magazine
+libro, libri, ebook, e-book
+
+# --- informatica ---
+programma, software, applicativo
+applicazione, app
+aggiornamento, update, upgrade
+installazione, installer, setup
+sistema operativo, so, os
+password, parola chiave, pwd
+account, profilo, utenza
+backup, copia di sicurezza, salvataggio
+
+# --- azioni ricorrenti sul forum ---
+scaricare, scarica, download, dl
+caricare, carica, upload, up
+collegamento, collegamenti, link
+segnalazione, segnalare, report
+richiesta, richieste, request
+risolto, risolta, solved
+funzionante, funziona, working
+non funzionante, offline, morto, dead

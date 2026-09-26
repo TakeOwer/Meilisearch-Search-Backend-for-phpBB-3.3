@@ -3,7 +3,7 @@
 	"type": "phpbb-extension",
 	"description": "Meilisearch search backend for phpBB. Replaces the native fulltext index with an external Meilisearch engine (typo tolerance, multilingual tokenisation, relevance ranking) while keeping all phpBB permission checks in SQL.",
 	"homepage": "https://github.com/salvocortesiano/phpbb-ext-meilisearch",
-	"version": "1.9.2",
+	"version": "1.14.0",
 	"time": "2026-08-15",
 	"keywords": ["phpbb", "extension", "search", "meilisearch", "fulltext"],
 	"license": "GPL-2.0-only",

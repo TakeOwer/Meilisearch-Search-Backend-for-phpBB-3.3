@@ -1,0 +1,32 @@
+<!-- IF S_MEILISEARCH_HILIT_CSS -->
+<style>
+/* phpBB marks matched words with .posthilit, which prosilver paints in a muted
+   pink (#F3BFCC on #BC2A4D). Against a body of text that reads as barely
+   emphasised, and on styles that soften it further it becomes invisible - which
+   defeats the purpose of highlighting at all. A pale yellow is the convention
+   readers already associate with "this is what you searched for".
+   Declared with the same specificity phpBB uses, so it simply comes later. */
+.posthilit {
+	background-color: #FFF0A6;
+	color: #4A3B00;
+	padding: 0 3px 1px 3px;
+	border-radius: 2px;
+	box-shadow: 0 0 0 1px rgba(196, 168, 0, 0.35);
+}
+a .posthilit,
+.posthilit a {
+	color: inherit;
+}
+@media (prefers-color-scheme: dark) {
+	.posthilit {
+		background-color: #6B5A00;
+		color: #FFF6CC;
+		box-shadow: 0 0 0 1px rgba(255, 240, 166, 0.25);
+	}
+}
+</style>
+<!-- ENDIF -->
+
+<!-- IF S_MEILISEARCH_BANNER_HEADER -->
+	<!-- INCLUDE @salvocortesiano_meilisearch/meilisearch_notice.html -->
+<!-- ENDIF -->

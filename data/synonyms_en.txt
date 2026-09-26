@@ -1,0 +1,64 @@
+# name: English
+# Starter synonyms - English
+# One group per line, terms separated by commas.
+# Every term in a group finds every other term, in both directions.
+# Lines starting with # are comments.
+#
+# This list is deliberately generic: the real value comes from the terms your
+# own board uses. Load it, then adapt it.
+#
+# NOTE: do not add antonyms. Declaring "large, small" as a group means someone
+# searching for "large screen" gets the posts about small ones. Synonyms close
+# the gap between how a thing is written and how it is searched for; antonyms
+# widen it.
+
+# --- languages and localisation ---
+subtitles, subtitle, subs, sub
+subtitled, softsub, hardsub
+dubbed, dubbing, dub
+multilanguage, multilang, multi
+
+# --- video formats ---
+1080p, fullhd, full hd
+2160p, 4k, uhd, ultrahd
+720p, hd
+bluray, blu-ray, bd, br
+dvdrip, dvd rip
+webdl, web-dl, web dl
+hevc, h265, h.265, x265
+avc, h264, h.264, x264
+
+# --- audio formats ---
+flac, lossless
+mp3, mpeg audio
+ac3, dolby digital
+dts, digital theater systems
+
+# --- content types ---
+movie, film, feature
+series, tv series, show
+episode, ep
+season, series run
+comic, comics, graphic novel
+magazine, magazines
+book, books, ebook, e-book
+
+# --- computing ---
+program, software, application
+application, app
+update, upgrade, patch
+installation, installer, setup
+operating system, os
+password, passphrase, pwd
+account, profile, login
+backup, back-up, copy
+
+# --- common board actions ---
+download, dl, downloading
+upload, ul, uploading
+link, links, url
+report, reporting, flag
+request, requests, asking
+solved, resolved, fixed
+working, works, alive
+broken, offline, dead, not working
