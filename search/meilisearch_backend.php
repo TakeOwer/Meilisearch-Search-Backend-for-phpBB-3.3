@@ -1271,19 +1271,39 @@ class meilisearch_backend extends \phpbb\search\base
 		foreach ($options as $value => $key)
 		{
 			$html .= '<option value="' . (int) $value . '"' . (($current === $value) ? ' selected="selected"' : '') . '>'
-				. $this->esc($this->lang($key)) . '</option>';
+				. $this->esc_lang($this->lang($key)) . '</option>';
 		}
 
 		return $html . '</select>';
 	}
 
 	/**
+	 * Escape a value coming from configuration or a request.
+	 *
 	 * @param string $value
 	 * @return string
 	 */
 	protected function esc($value)
 	{
 		return htmlspecialchars((string) $value, ENT_COMPAT, 'UTF-8');
+	}
+
+	/**
+	 * Escape a language string for use inside an attribute or an option label.
+	 *
+	 * Language files legitimately contain HTML entities - &rsquo; for an
+	 * apostrophe, &mdash; for a dash - and running them through the plain
+	 * escaper turns the ampersand into &amp;, so the browser prints the entity
+	 * instead of the character. Passing double_encode = false leaves an existing
+	 * entity alone while still escaping a raw <, > or " that a translator may
+	 * have introduced.
+	 *
+	 * @param string $value
+	 * @return string
+	 */
+	protected function esc_lang($value)
+	{
+		return htmlspecialchars((string) $value, ENT_COMPAT, 'UTF-8', false);
 	}
 
 	/**

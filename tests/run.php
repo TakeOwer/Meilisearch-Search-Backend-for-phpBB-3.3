@@ -649,6 +649,32 @@ foreach ($services as $svc)
 
 $t->empty_($service_errors, 'ogni servizio riceve il numero di argomenti che il costruttore accetta');
 
+// --- 10. le stringhe di lingua non vengono ri-codificate ---
+// I file di lingua contengono legittimamente entita HTML (&rsquo;, &mdash;).
+// Passarle per htmlspecialchars() con double_encode attivo trasforma la & in
+// &amp; e il browser stampa l'entita invece del carattere.
+$double_encoded = array();
+
+foreach ($php_files as $file)
+{
+	$content = (string) file_get_contents($file);
+
+	if (preg_match_all('/\$this->esc\(\s*\$this->(?:lang|language->lang)\(/', $content, $m))
+	{
+		$double_encoded[] = basename($file) . ': ' . count($m[0]) . ' occorrenze di esc(lang(...))';
+	}
+}
+
+$t->empty_($double_encoded, 'nessuna stringa di lingua passa per l\'escaper delle configurazioni');
+
+// Le entita presenti nei file devono sopravvivere all'escaper dedicato
+$sample = 'l&rsquo;utente &mdash; "x" <b>';
+$t->same(
+	'l&rsquo;utente &mdash; &quot;x&quot; &lt;b&gt;',
+	htmlspecialchars($sample, ENT_COMPAT, 'UTF-8', false),
+	'l\'escaper delle lingue conserva le entita e protegge il resto'
+);
+
 /* ================================================================== */
 
 echo "\n" . str_repeat('=', 60) . "\n";
