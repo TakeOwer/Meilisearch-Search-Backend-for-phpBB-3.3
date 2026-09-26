@@ -1,6 +1,6 @@
 # Meilisearch Search Backend for phpBB 3.3.x
 
-![Version](https://img.shields.io/badge/version-1.14.0-105080)
+![Version](https://img.shields.io/badge/version-1.14.1-105080)
 ![phpBB](https://img.shields.io/badge/phpBB-3.3.x-377a33)
 ![PHP](https://img.shields.io/badge/PHP-%3E%3D7.4-377a33)
 ![License](https://img.shields.io/badge/license-GPL--2.0--only-7f7f7f)
