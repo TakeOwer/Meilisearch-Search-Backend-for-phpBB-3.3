@@ -281,6 +281,20 @@ $t->true_(!$syn->starter_exists($tmp, '../../etc/passwd'), 'un codice malevolo n
 @unlink($tmp . '/note.txt');
 @rmdir($tmp);
 
+// --- il payload dei sinonimi deve essere un oggetto JSON, non un array ---
+// Una lista vuota codificata come [] fa rifiutare a Meilisearch l'intera
+// chiamata alle impostazioni con invalid_settings_synonyms, quindi su un forum
+// senza sinonimi "Crea l'indice e applica le impostazioni" fallisce sempre.
+$t->same('{}', json_encode($syn->to_payload(array())), 'una lista vuota si serializza come oggetto JSON');
+// Entrambe le direzioni, come deve essere: Meilisearch memorizza i sinonimi in
+// una sola direzione per voce.
+$t->same(
+	'{"sub":["sottotitoli"],"sottotitoli":["sub"]}',
+	json_encode($syn->to_payload($syn->parse('sub, sottotitoli'))),
+	'una lista piena si serializza come oggetto con array di termini'
+);
+$t->true_(is_object($syn->to_payload(array())), 'to_payload restituisce sempre un oggetto');
+
 /* =====================================================================
  * highlighter
  * ================================================================== */

@@ -409,9 +409,13 @@ class indexer
 		$synonyms = new synonyms();
 		$map = $synonyms->parse($this->get_synonyms_raw());
 
-		// An empty map is sent deliberately: it is how a list that used to have
-		// entries gets cleared on the Meilisearch side.
-		$settings['synonyms'] = $map;
+		// Sent through to_payload() so the empty case serialises as {} rather
+		// than []: Meilisearch rejects the entire settings call with
+		// invalid_settings_synonyms otherwise, which on a board with no synonym
+		// list means "Create index and apply settings" always fails. An empty
+		// map is still sent deliberately: it is how a list that used to have
+		// entries gets cleared.
+		$settings['synonyms'] = $synonyms->to_payload($map);
 
 		$locales = $this->get_locales();
 

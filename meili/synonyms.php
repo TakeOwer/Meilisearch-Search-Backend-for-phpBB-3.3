@@ -214,6 +214,23 @@ class synonyms
 		return function_exists('mb_strlen') ? mb_strlen($term, 'UTF-8') : strlen($term);
 	}
 	/**
+	 * The value Meilisearch expects for its synonyms setting.
+	 *
+	 * The map has to reach the API as a JSON object. A non-empty PHP
+	 * associative array already encodes that way, but an empty one encodes as
+	 * `[]`, and Meilisearch rejects the whole settings call with
+	 * invalid_settings_synonyms. Casting to an object makes the empty case
+	 * `{}`, which is also how a list that used to have entries gets cleared.
+	 *
+	 * @param array $map Output of parse()
+	 * @return object
+	 */
+	public function to_payload(array $map)
+	{
+		return (object) $map;
+	}
+
+	/**
 	 * Read one of the starter lists shipped with the extension.
 	 *
 	 * These live in data/ inside the extension, are read-only, and are replaced
